@@ -20,7 +20,7 @@ class AutoYamlSchema(AutoSchema):
 
 
     def get_yaml_from_docstring(self, method):
-        """get yaml data from docstring
+        """get operation object yaml data from docstring
         `---` を起点として読み込む
         """
         view = self.view
@@ -53,6 +53,8 @@ class AutoYamlSchema(AutoSchema):
             return super().get_operation(method)
 
 
-    def get_components(self, method):
+    def get_components(self, path, method):
         # todo SchemaGenerator が呼び出す関数
-        pass
+        if self.yaml_schemas:
+            return {}
+        return super().get_components(path, method)
