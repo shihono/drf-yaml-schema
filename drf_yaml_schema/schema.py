@@ -17,7 +17,7 @@ class AutoYamlSchema(AutoSchema):
 
     def load_yaml_from_docstring(self, method):
         """load operation object yaml data from docstring
-        `---` を起点として読み込む
+        `---` is starting point to load yaml
         """
         view = self.view
         method_name = str(method).lower()
@@ -48,14 +48,16 @@ class AutoYamlSchema(AutoSchema):
         return self.yaml_schemas[method]
 
     def get_operation(self, path, method):
-        # todo SchemaGenerator が呼び出す関数
+        """get Operation Object on a path from method's docstring"""
         if self.get_yaml_from_docstring(method):
             return self.yaml_schemas[method]
         else:
             return super().get_operation(path, method)
 
     def get_components(self, path, method):
-        # todo SchemaGenerator が呼び出す関数
+        """get Components Object
+        if get operation object from docstring, return None
+        """
         if self.get_yaml_from_docstring(method):
             return {}
         return super().get_components(path, method)
