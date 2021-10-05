@@ -12,7 +12,7 @@ Only support for [OpenAPI](https://github.com/OAI/OpenAPI-Specification) schema
 - Write Operation Object (e.g. parameters, responses) to docstring in yaml format
    - Three or more horizontal bar (like `---`) mark the starting position of yaml
 
-```
+```python
 from rest_framework import views
 from drf_yaml_schema import AutoYamlSchema
 
