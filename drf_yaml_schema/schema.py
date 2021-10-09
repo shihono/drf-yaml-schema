@@ -1,9 +1,9 @@
 from inspect import cleandoc
 
+import yaml
 from rest_framework.schemas.openapi import AutoSchema
 from rest_framework.utils import formatting
 
-import yaml
 try:
     from yaml import CLoader as Loader
 except ImportError:
@@ -13,15 +13,11 @@ except ImportError:
 class AutoYamlSchema(AutoSchema):
     def __init__(self, tags=None, operation_id_base=None, component_name=None):
         super().__init__(tags, operation_id_base, component_name)
-
         self.yaml_schemas = {}
-        for method in self.view.http_method_names:
-            self.yaml_schemas[method] = self.get_yaml_from_docstring(method)
 
-
-    def get_yaml_from_docstring(self, method):
-        """get yaml data from docstring
-        `---` を起点として読み込む
+    def load_yaml_from_docstring(self, method):
+        """load operation object yaml data from docstring
+        `---` is starting point to load yaml
         """
         view = self.view
         method_name = str(method).lower()
@@ -45,14 +41,23 @@ class AutoYamlSchema(AutoSchema):
         except yaml.YAMLError:
             return None
 
-    def get_operation(self, method):
-        # todo SchemaGenerator が呼び出す関数
-        if self.yaml_schemas:
+    def get_yaml_from_docstring(self, method):
+        if self.yaml_schemas.get(method):
+            return self.yaml_schemas[method]
+        self.yaml_schemas[method] = self.load_yaml_from_docstring(method)
+        return self.yaml_schemas[method]
+
+    def get_operation(self, path, method):
+        """get Operation Object on a path from method's docstring"""
+        if self.get_yaml_from_docstring(method):
             return self.yaml_schemas[method]
         else:
-            return super().get_operation(method)
+            return super().get_operation(path, method)
 
-
-    def get_components(self, method):
-        # todo SchemaGenerator が呼び出す関数
-        pass
+    def get_components(self, path, method):
+        """get Components Object
+        if get operation object from docstring, return None
+        """
+        if self.get_yaml_from_docstring(method):
+            return {}
+        return super().get_components(path, method)
