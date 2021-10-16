@@ -1,0 +1,20 @@
+name: Test Python
+
+on: pull_request
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+    - uses: snok/install-poetry@v1
+    - name: Install Poetry
+      run: |
+        poetry install --no-interaction
+    - name: Check Format
+      run: |
+        poetry run isort . --check
+        poetry run isort . --diff
+        poetry run black . --check
+        poetry run black . --diff
