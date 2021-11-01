@@ -9,7 +9,7 @@ exclude = ["sample/*"]
 python = "^3.8"
 PyYAML = "^5.4.1"
 djangorestframework = "^3.12.4"
-uritemplate = "^3.0.1"
+uritemplate = "^4.1.1"
 
 [tool.poetry.dev-dependencies]
 black = "^21.9b0"
