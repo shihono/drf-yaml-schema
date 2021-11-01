@@ -7,7 +7,7 @@ exclude = ["sample/*"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-PyYAML = "^5.4.1"
+PyYAML = "^6.0"
 djangorestframework = "^3.12.4"
 uritemplate = "^3.0.1"
 
